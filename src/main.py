@@ -1,4 +1,4 @@
-from model import Net_50
+from model import Net_50, Net_18, LeNet
 import torch.optim as optim
 import torch
 import torch.nn as nn
@@ -29,13 +29,13 @@ parser.add_argument("--dataset", default=[
                                           "D:\DataSet\DS\\node\\SOCIAL\\Pears_148_obj_",
                                           "D:\DataSet\DS\\node\\WM\\Pears_148_obj_",
 
-                                          "D:\DataSet\DS\edge\\structure_148_edge_unweight_obj_" ], help="数据集路径")  # dataset就是这样一个路径的列表，node和edge都要，最后那个“_”后面是节点的标号
+                                          "D:\DataSet\DS\edge\\structure_148_edge_unweight_obj_"   ], help="数据集路径")  # dataset就是这样一个路径的列表，node和edge都要，最后那个“_”后面是节点的标号
 
 parser.add_argument("--num_list", default="D:\DataSet\DS\\list.txt", help="节点标号列表路径")  # num_list是所用的节点的标号，文件名中都有
 parser.add_argument("--num_node", default=148, help="节点数")
 parser.add_argument("--batch_size", default=8, type=int, help="批处理大小")
 parser.add_argument('--fold_idx', type=int, default=7, help='折叠索引，取值1-9')
-parser.add_argument('--epoch_num', type=int, default=40, help='epoch轮次数量')
+parser.add_argument('--epoch_num', type=int, default=100, help='epoch轮次数量')
 parser.add_argument('--lr', default=0.001, help='学习率')
 args = parser.parse_args()  # 解析命令行参数并存储在args变量中
 
@@ -219,6 +219,7 @@ if __name__ == '__main__':
     '''
     net = torch.load('../models/net_ResNet-50.pth', map_location=torch.device('cpu'))
     '''
+    print(f">>>>>>>Mean last_15  Test Accuracy:{sum(test_accs[-15:])/len(test_accs[-15:])}\n" )
     print("Ploting...")
 
     plot_fig(range(epochs), test_accs, "Test_acc")

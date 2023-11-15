@@ -30,7 +30,7 @@ class Net_50(nn.Module):
 
 
 class Net_18(nn.Module):
-    def __init__(self, input_ch=1, num_class=3, pretrained=True):
+    def __init__(self, input_ch=1, num_class=7, pretrained=True):
         super(Net_18,self).__init__()
         self.model = models.resnet18(pretrained=pretrained)  # 使用预训练的ResNet-18模型作为基础模型
 
@@ -49,7 +49,7 @@ class Net_18(nn.Module):
         fc_weight = fc_weight[:, :3]
         model_dict['fc_weight'] = fc_weight
         model_dict.update(model_dict)
-        self.model.fc = nn.Linear(512, 3)
+        self.model.fc = nn.Linear(512, num_class)
 
     def forward(self,x):
         x = self.model(x)
@@ -68,19 +68,19 @@ class LeNet(nn.Module):
             nn.MaxPool2d(kernel_size=2)
         )
         self.fc1 = nn.Sequential(
-            nn.Linear(in_features=26 * 26 * 16, out_features=120)
+            nn.Linear(in_features=34 * 34 * 16, out_features=120)                 # 53: 10 * 10   148: 34 * 34
         )
         self.fc2 = nn.Sequential(
             nn.Linear(in_features=120, out_features=84)
         )
         self.fc3 = nn.Sequential(
-            nn.Linear(in_features=84, out_features=3)
+            nn.Linear(in_features=84, out_features=7)
         )
 
     def forward(self, input):
         conv1_output = self.conv1(input)  # 进行第一层卷积和池化操作
         conv2_output = self.conv2(conv1_output)  # 进行第二层卷积和池化操作
-        conv2_output = conv2_output.view(-1, 26*26*16)  # 将特征图展平为一维向量
+        conv2_output = conv2_output.reshape(conv2_output.shape[0], -1)  # 将特征图展平为一维向量
         fc1_output = self.fc1(conv2_output)  # 进行第一层全连接操作
         fc2_output=self.fc2(fc1_output)  # 进行第二层全连接操作
         fc3_output = self.fc3(fc2_output)  # 进行第三层全连接操作
