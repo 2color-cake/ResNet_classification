@@ -27,12 +27,10 @@ parser.add_argument("--dataset", default=[
                                           "D:\DataSet\DS\\node\\MOTOR\\Pears_148_obj_",
                                           "D:\DataSet\DS\\node\\RELATIONAL\\Pears_148_obj_",
                                           "D:\DataSet\DS\\node\\SOCIAL\\Pears_148_obj_",
-                                          "D:\DataSet\DS\\node\\WM\\Pears_148_obj_",
+                                          "D:\DataSet\DS\\node\\WM\\Pears_148_obj_"], help="数据集路径")  # dataset;node最后那个“_”后面是节点的标号
 
-                                          "D:\DataSet\DS\edge\\structure_148_edge_unweight_obj_"   ], help="数据集路径")  # dataset就是这样一个路径的列表，node和edge都要，最后那个“_”后面是节点的标号
-
-parser.add_argument("--num_list", default="D:\DataSet\DS\\list.txt", help="节点标号列表路径")  # num_list是所用的节点的标号，文件名中都有
-parser.add_argument("--num_node", default=148, help="节点数")
+parser.add_argument("--num_list", default="D:\DataSet\DS_task_rest\\task_vs_rest\\56_random_20\\1\\\list.txt", help="节点标号列表路径")  # num_list是所用的节点的标号，文件名中都有
+parser.add_argument("--num_node", default=20, help="节点数")
 parser.add_argument("--batch_size", default=8, type=int, help="批处理大小")
 parser.add_argument('--fold_idx', type=int, default=7, help='折叠索引，取值1-9')
 parser.add_argument('--epoch_num', type=int, default=100, help='epoch轮次数量')
@@ -45,7 +43,7 @@ def load_fMRIdata():
     graphs = []  # S2VGraph类型的无向图集合，每个S2VGraph里包含一个g即networkX类型的图
     lable = []   # 对应上面无向图的类标
     # 循环遍历数据集路径，加载数据  （-1是去除了最后那个边的路径，只留FC矩阵含类标的）
-    for i in range(len(args.dataset) - 1):
+    for i in range(len(args.dataset)):
         graphs_c = load_data(args.dataset, args.num_list, i)  # i是当前所用的dataset路径序号
         lable_c = (np.zeros(
             len(graphs_c)) + i).tolist()  # np.zeros生成一个graphs_c那么长的列表，即对应每一张图都有一个标签（具体的标签其实是i,因为广播特性矩阵加一个i即每个元素都加了i，最后再转化为列表）
@@ -133,7 +131,6 @@ def train(net, train_loader, epoch, optimizer, criterion):
 
     return sum(losses) / len(losses)
 
-
 def test(net, test_loader):
     accs = []
     with torch.no_grad():
@@ -148,7 +145,6 @@ def test(net, test_loader):
             accs.append(prec1.item())
 
     return sum(accs) / len(accs)
-
 
 def accuracy(output, target, topk=(1,)):
     """Computes the precision@k for the specified values of k"""
@@ -171,7 +167,6 @@ def plot_fig(epochs, test_accs, pic_name):
     plt.title("Epochs v.s. {}".format(pic_name))
     plt.savefig("../fig/{}.png".format(pic_name))
     plt.close()
-
 
 if __name__ == '__main__':
 
