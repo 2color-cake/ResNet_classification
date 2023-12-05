@@ -68,7 +68,7 @@ class LeNet(nn.Module):
             nn.MaxPool2d(kernel_size=2)
         )
         self.fc1 = nn.Sequential(
-            nn.Linear(in_features=34 * 34 * 16, out_features=120)                 # 53: 10 * 10   148: 34 * 34
+            nn.Linear(in_features=10 * 10 * 16, out_features=120)                   
         )
         self.fc2 = nn.Sequential(
             nn.Linear(in_features=120, out_features=84)
