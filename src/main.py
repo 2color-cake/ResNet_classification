@@ -30,7 +30,7 @@ parser.add_argument("--dataset", default=[
                                           "D:\DataSet\DS\\node\\WM\\Pears_148_obj_"], help="数据集路径")  # dataset;node最后那个“_”后面是节点的标号
 
 parser.add_argument("--num_list", default="D:\DataSet\DS\\list.txt", help="节点标号列表路径")  # num_list是所用的节点的标号，文件名中都有
-parser.add_argument("--num_node", default=20, help="节点数")
+parser.add_argument("--num_node", default=148, help="节点数")
 parser.add_argument("--batch_size", default=8, type=int, help="批处理大小")
 parser.add_argument('--fold_idx', type=int, default=7, help='折叠索引，取值1-9')
 parser.add_argument('--epoch_num', type=int, default=100, help='epoch轮次数量')
